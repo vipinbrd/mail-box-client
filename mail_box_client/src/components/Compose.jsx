@@ -6,6 +6,9 @@ import { convertFromRaw} from "draft-js";
 import draftToHtml from 'draftjs-to-html';
 import { Authstore } from "./store/AuthProvider";
 import { Url } from "./URL";
+import { addToDraftBox } from "./store/DraftReducer";
+import { addToSentBox } from "./store/SentReducer";
+import { useDispatch } from "react-redux";
 
 
 export function Compose() {
@@ -15,6 +18,7 @@ export function Compose() {
   const [subject, setSubject] = useState(""); 
   const{authInfo}=useContext(Authstore);
   const[toast,setToast]=useState("")
+  const dispatch=useDispatch();
   
 
   const onEditorStateChange = (newState) => {
