@@ -26,7 +26,6 @@ export function Inbox() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const inboxMails = useSelector((state) => state.inboxMail);
-
   const [isLoading, setIsLoading] = useState(true);
 
   async function getAllMail() {
@@ -77,14 +76,25 @@ export function Inbox() {
             return (
               <li
                 key={mail.id}
-                className="bg-white rounded-xl shadow p-4 flex justify-between items-start hover:bg-gray-50 cursor-pointer transition"
+                className={`rounded-xl shadow p-4 flex justify-between items-start hover:bg-gray-50 cursor-pointer transition ${
+                  !mail.read ? "bg-blue-50" : "bg-white"
+                }`}
                 onClick={() => navigate(`/mail/${mail.id}`)}
               >
                 <div className="flex-1">
                   <div className="flex justify-between items-center mb-1">
-                    <h3 className="font-semibold text-lg text-gray-800">
-                      {mail.subject}
-                    </h3>
+                    <div className="flex items-center space-x-2">
+                      {!mail.read && (
+                        <span className="h-2 w-2 bg-blue-500 rounded-full"></span>
+                      )}
+                      <h3
+                        className={`font-semibold text-lg ${
+                          !mail.read ? "text-black" : "text-gray-800"
+                        }`}
+                      >
+                        {mail.subject}
+                      </h3>
+                    </div>
                     <span className="text-sm text-gray-500">
                       {formatDateTime(mail.timestamp)}
                     </span>
@@ -92,13 +102,13 @@ export function Inbox() {
                   <p className="text-gray-600 mb-1">{mail.sender}</p>
                   <p className="text-gray-700 text-sm">{bodyPreview}</p>
                 </div>
-                <div className="ml-4 flex flex-col items-center space-y-2 z-10" onClick={(e) => e.stopPropagation()}>
-         
+                <div
+                  className="ml-4 flex flex-col items-center space-y-2 z-10"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <button className="text-yellow-400 hover:text-yellow-500">
                     {mail.starred ? <FaStar /> : <FaRegStar />}
                   </button>
-
-                 
                   <button
                     className="text-red-500 hover:text-red-600"
                     onClick={() => handleDelete(mail.id)}
