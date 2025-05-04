@@ -2,10 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { Url } from './URL';
 import { useDispatch, useSelector } from "react-redux";
 import { replaceMessages } from "./store/AllMailReducer";
-import { replaceDraftBox } from "./store/DraftReducer";
-import { replaceInbox } from "./store/InboxReducer";
-import { replaceSentBox } from "./store/SentReducer";
-import { replaceTrashBox } from "./store/TrashReducer";
+import { replaceDraftBox,deletefromDraft } from "./store/DraftReducer";
+import { replaceInbox ,} from "./store/InboxReducer";
+import { replaceSentBox,deletefromSent } from "./store/SentReducer";
+import { replaceTrashBox,deletefromTrash } from "./store/TrashReducer";
 import { Authstore } from "./store/AuthProvider";
 import { FaStar, FaRegStar, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -21,51 +21,39 @@ function stripHtmlTags(html) {
   return tempDiv.textContent || tempDiv.innerText || "";
 }
 
-export function Inbox() {
+export function MailHelper({type}) {
   const { authInfo } = useContext(Authstore);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const inboxMails = useSelector((state) => state.inboxMail);
-  const [isLoading, setIsLoading] = useState(true);
+  const mails = useSelector((state) => state[type]);
   const[toast,setToast]=useState();
+  console.log(mails)
 
-  async function getAllMail() {
-    const req = await fetch(`${Url}/user/emails/${authInfo.userId}`);
-    const res = await req.json();
 
-    const draft = [], sent = [], trash = [], inbox = [];
 
-    res.forEach((ele) => {
-      switch (ele.status) {
-        case "DRAFT": draft.push(ele); break;
-        case "SENT": sent.push(ele); break;
-        case "TRASH": trash.push(ele); break;
-        case "INBOX": inbox.push(ele); break;
-      }
-    });
-
-    dispatch(replaceMessages(res));
-    dispatch(replaceDraftBox(draft));
-    dispatch(replaceInbox(inbox));
-    dispatch(replaceTrashBox(trash));
-    dispatch(replaceSentBox(sent));
-    setIsLoading(false);
-  }
-
-  useEffect(() => {
-    setIsLoading(true);
-    getAllMail();
-  }, []);
 
   async function handleDelete(mailId) {
     await fetch(`${Url}/mail/remove/${mailId}`, {
       method: "DELETE",
     });
-    setToast("Conversation Moved To Trash")
+    setToast("Conversation Deleted")
     setTimeout(()=>{
       setToast("")
     },1500)
-    getAllMail(); 
+    
+    if(type=="trashMail"){
+        dispatch(deletefromTrash(mailId))
+     
+    }
+    else if(type=="draftMail"){
+   dispatch(deletefromDraft(mailId));
+    }
+
+    else{
+        dispatch(deletefromSent(mailId))
+    }
+
+
   }
 
   return (
@@ -76,13 +64,13 @@ export function Inbox() {
           {toast}
         </div>
       )}
-      {isLoading && <p className="text-center text-gray-500">Loading...</p>}
-      {!isLoading && inboxMails.length === 0 && (
-        <p className="text-center text-gray-500">Your inbox is empty</p>
+
+      {mails.length === 0 && (
+        <p className="text-center text-gray-500">No Mail Here</p>
       )}
       <ul className="space-y-4">
-        {!isLoading &&
-          inboxMails.map((mail) => {
+        {mails.length>0 &&
+         mails.map((mail) => {
             const bodyPreview = stripHtmlTags(mail.body).slice(0, 100) + "...";
             return (
               <li

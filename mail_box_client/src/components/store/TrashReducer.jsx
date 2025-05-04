@@ -9,8 +9,12 @@ export const TrashReducer=createSlice({
         },
         replaceTrashBox(state,payload){
             return payload.payload;
+        },
+        deletefromTrash(state,payload){
+     
+            return state.filter((ele)=>ele.id!==payload.payload)
         }
     }
 })
 
-export const {addToTrashBox,replaceTrashBox}=TrashReducer.actions
+export const {addToTrashBox,replaceTrashBox,deletefromTrash}=TrashReducer.actions

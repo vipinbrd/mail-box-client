@@ -26,7 +26,7 @@ export function MailDetails() {
 
         setTimeout(() => {
           setToast("");
-        }, 2000); // Toast disappears after 2 seconds
+        }, 2000); 
       }
     });
   }
@@ -34,7 +34,7 @@ export function MailDetails() {
   return (
     <div className="container mx-auto my-8 p-6 bg-white shadow-lg rounded-lg relative">
 
-      {/* Toast message positioned at the bottom-right corner */}
+
       {toast && (
         <div className="fixed bottom-5 right-5 bg-green-500 text-white px-4 py-2 rounded shadow z-50">
           {toast}
@@ -50,12 +50,13 @@ export function MailDetails() {
           >
             Reply
           </button>
+          {currentMail.status!=="INBOX"&&
           <button
             className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
             onClick={() => alert("Delete functionality")}
           >
             Delete
-          </button>
+          </button>}
         </div>
       </div>
 

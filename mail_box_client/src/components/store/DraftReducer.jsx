@@ -9,8 +9,12 @@ export const DraftReducer=createSlice({
         },
         replaceDraftBox(state,payload){
             return payload.payload;
+        },
+        deletefromDraft(state,payload){
+     
+            return state.filter((ele)=>ele.id!==payload.payload)
         }
     }
 })
 
-export const {addToDraftBox,replaceDraftBox}=DraftReducer.actions
+export const {addToDraftBox,replaceDraftBox,deletefromDraft}=DraftReducer.actions

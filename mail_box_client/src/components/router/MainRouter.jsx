@@ -9,6 +9,7 @@ import { Inbox } from "../Inbox";
 import { useContext } from "react";
 import { Authstore } from "../store/AuthProvider";
 import { MailDetails } from "../MailDetails";
+import { Trash } from "../Trash";
 export function MainRouter(){ 
 const {authInfo}=useContext(Authstore)
  const isloggedIn=Object.values(authInfo).length>0;
@@ -45,6 +46,10 @@ const router=createBrowserRouter([
             path:'mail/:mailId',
             element:<MailDetails/>
 
+        },
+        {
+            path:'trash',
+            element:<Trash/>
         }
         
     ]

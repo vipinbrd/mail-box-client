@@ -9,8 +9,12 @@ export const SentReducer=createSlice({
         },
         replaceSentBox(state,payload){
             return payload.payload;
+        },
+        deletefromSent(state,payload){
+     
+            return state.filter((ele)=>ele.id!==payload.payload)
         }
     }
 })
 
-export const {addToSentBox,replaceSentBox}=SentReducer.actions
+export const {addToSentBox,replaceSentBox,deletefromSent}=SentReducer.actions
