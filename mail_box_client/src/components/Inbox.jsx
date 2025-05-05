@@ -34,6 +34,7 @@ export function Inbox() {
     const res = await req.json();
 
     const draft = [], sent = [], trash = [], inbox = [];
+    res.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp))
 
     res.forEach((ele) => {
       switch (ele.status) {
@@ -55,6 +56,13 @@ export function Inbox() {
   useEffect(() => {
     setIsLoading(true);
     getAllMail();
+
+    const id=setInterval(()=>{
+      getAllMail()
+    },2000)
+    return  ()=>{
+       clearInterval(id)
+    }
   }, []);
 
   async function handleDelete(mailId) {
