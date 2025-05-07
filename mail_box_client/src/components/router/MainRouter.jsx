@@ -38,28 +38,28 @@ const router=createBrowserRouter([
         },
         {
             path:"compose",
-            element:<Compose/>
+            element:!isloggedIn?<Signup/>:<Compose/>
         },
         {
             path:'inbox',
-            element:<Inbox/>
+            element:!isloggedIn?<Signup/>:<Inbox/>
         },
         {
             path:'mail/:mailId',
-            element:<MailDetails/>
+            element:!isloggedIn?<Signup/>:<MailDetails/>
 
         },
         {
             path:'trash',
-            element:<Trash/>
+            element:!isloggedIn?<Signup/>:<Trash/>
         },
         {
             path:'sent',
-            element:<Sent/>
+            element:!isloggedIn?<Signup/>:<Sent/>
         },
         {
             path:'draft',
-            element:<Draft/>
+            element:!isloggedIn?<Signup/>:<Draft/>
         }
         
     ]
